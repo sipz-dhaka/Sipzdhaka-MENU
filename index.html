@@ -1,689 +1,288 @@
 <!DOCTYPE html>
-<html lang="bn" class="h-full">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sipz | Dhaka - Digital Menu</title>
+    <title>SIPZ | DHAKA - Menu</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            yellow: '#FFC801',
-                            darkYellow: '#E5B300',
-                            accentYellow: '#FDB813',
-                            bg: '#FFFDF0',
-                            black: '#121212',
-                            cardBg: '#FFFFFF'
-                        }
+                        brandYellow: '#FCD34D',
+                        brandAccent: '#F59E0B',
+                        brandDark: '#111827',
+                        brandBg: '#FEF3C7',
                     },
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        brush: ['"Caveat"', 'cursive']
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Custom Scrollbar for horizontal categories */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        
-        .brush-font {
-            font-family: 'Caveat', cursive;
-        }
-
-        .hero-shadow {
-            box-shadow: 0 10px 30px -5px rgba(255, 200, 1, 0.4);
-        }
+        html { scroll-behavior: smooth; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-brand-bg text-brand-black min-h-full font-sans antialiased selection:bg-brand-yellow selection:text-black flex flex-col justify-between">
+<body class="bg-amber-50/80 text-gray-900 min-h-screen font-sans flex flex-col antialiased">
 
-    <!-- HEADER / BRANDING BANNER -->
-    <header class="bg-brand-yellow sticky top-0 z-40 shadow-md transition-all">
-        <div class="max-w-4xl mx-auto px-4 py-4 sm:py-6 flex flex-col items-center justify-center text-center relative">
+    <!-- Header Section -->
+    <header class="bg-amber-300/90 backdrop-blur-md sticky top-0 z-50 border-b border-amber-400/40 shadow-sm py-4 px-4">
+        <div class="max-w-5xl mx-auto flex flex-col items-center">
             
-            <!-- Logo Box -->
-            <div class="flex flex-col items-center cursor-pointer" onclick="scrollToTop()">
-                <h1 class="brush-font text-6xl sm:text-7xl font-bold tracking-tight text-black leading-none select-none">
-                    sipz
-                </h1>
-                <span class="text-xs sm:text-sm tracking-[0.35em] font-extrabold text-black uppercase mt-1 border-t border-black/30 pt-1 px-3">
-                    DHAKA | 1216
-                </span>
+            <!-- Logo Header -->
+            <div class="flex items-center space-x-3 mb-3">
+                <div class="bg-black text-amber-300 font-display font-extrabold text-2xl px-3 py-1 rounded-xl shadow">
+                    SIPZ
+                </div>
+                <div class="h-7 w-0.5 bg-black/80"></div>
+                <div class="text-left">
+                    <h1 class="text-xl sm:text-2xl font-extrabold tracking-wider text-black leading-none font-display">DHAKA</h1>
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-amber-900">Food & Drinks</p>
+                </div>
             </div>
 
-            <!-- Subtitle badge -->
-            <div class="mt-3 inline-flex items-center gap-2 bg-black text-brand-yellow text-xs px-3 py-1 rounded-full font-semibold">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                Open Now • Fast Delivery & Takeaway
+            <!-- Search Bar -->
+            <div class="w-full max-w-md relative mt-1">
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    placeholder="Search chicken, burger, bubble tea, browniness..." 
+                    class="w-full pl-10 pr-10 py-2.5 rounded-full bg-white border border-amber-400/60 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black shadow-sm text-sm font-medium"
+                >
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-amber-700 text-sm"></i>
+                <button id="clearSearch" class="hidden absolute right-3 top-2.5 text-gray-400 hover:text-gray-700 p-0.5">
+                    <i class="fa-solid fa-circle-xmark text-base"></i>
+                </button>
             </div>
-        </div>
 
-        <!-- SEARCH BAR & CATEGORIES -->
-        <div class="bg-black/5 backdrop-blur-md border-t border-b border-black/10 px-4 py-3">
-            <div class="max-w-4xl mx-auto space-y-3">
-                <!-- Search Box -->
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        placeholder="Search menu items (e.g. Ramen, Boba, Burger)..."
-                        class="w-full bg-white text-black pl-10 pr-10 py-2.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black transition shadow-sm"
-                        oninput="filterItems()"
-                    >
-                    <button 
-                        id="clearSearch" 
-                        onclick="resetSearch()" 
-                        class="hidden absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black text-sm">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <!-- Category Tabs -->
-                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 text-sm font-semibold">
-                    <button onclick="setCategory('all')" class="cat-btn active px-4 py-2 rounded-full bg-black text-brand-yellow shrink-0 transition" data-cat="all">
-                        <i class="fa-solid fa-border-all mr-1.5"></i>All Menu
-                    </button>
-                    <button onclick="setCategory('main')" class="cat-btn px-4 py-2 rounded-full bg-white text-black hover:bg-black/10 shrink-0 transition" data-cat="main">
-                        <i class="fa-solid fa-burger mr-1.5"></i>Main Course
-                    </button>
-                    <button onclick="setCategory('drinks')" class="cat-btn px-4 py-2 rounded-full bg-white text-black hover:bg-black/10 shrink-0 transition" data-cat="drinks">
-                        <i class="fa-solid fa-glass-water mr-1.5"></i>Drinks (Iced)
-                    </button>
-                    <button onclick="setCategory('dessert')" class="cat-btn px-4 py-2 rounded-full bg-white text-black hover:bg-black/10 shrink-0 transition" data-cat="dessert">
-                        <i class="fa-solid fa-cookie-bite mr-1.5"></i>Dessert
-                    </button>
-                    <button onclick="setCategory('addons')" class="cat-btn px-4 py-2 rounded-full bg-white text-black hover:bg-black/10 shrink-0 transition" data-cat="addons">
-                        <i class="fa-solid fa-plus-circle mr-1.5"></i>Add-Ons
-                    </button>
-                </div>
+            <!-- Category Tabs -->
+            <div class="w-full max-w-2xl mt-4 overflow-x-auto no-scrollbar flex space-x-2 justify-start sm:justify-center px-1">
+                <button onclick="filterCategory('all')" id="tab-all" class="cat-btn active bg-black text-amber-300 font-bold px-4 py-1.5 rounded-full text-xs whitespace-nowrap shadow transition">
+                    <i class="fa-solid fa-border-all mr-1.5"></i>All Menu
+                </button>
+                <button onclick="filterCategory('main')" id="tab-main" class="cat-btn bg-white hover:bg-amber-200 text-gray-800 font-bold px-4 py-1.5 rounded-full text-xs whitespace-nowrap border border-amber-300 shadow-sm transition">
+                    <i class="fa-solid fa-burger mr-1.5"></i>Main Course
+                </button>
+                <button onclick="filterCategory('drinks')" id="tab-drinks" class="cat-btn bg-white hover:bg-amber-200 text-gray-800 font-bold px-4 py-1.5 rounded-full text-xs whitespace-nowrap border border-amber-300 shadow-sm transition">
+                    <i class="fa-solid fa-wine-glass mr-1.5"></i>Drinks (Iced)
+                </button>
+                <button onclick="filterCategory('dessert')" id="tab-dessert" class="cat-btn bg-white hover:bg-amber-200 text-gray-800 font-bold px-4 py-1.5 rounded-full text-xs whitespace-nowrap border border-amber-300 shadow-sm transition">
+                    <i class="fa-solid fa-cookie-bite mr-1.5"></i>Dessert
+                </button>
+                <button onclick="filterCategory('addons')" id="tab-addons" class="cat-btn bg-white hover:bg-amber-200 text-gray-800 font-bold px-4 py-1.5 rounded-full text-xs whitespace-nowrap border border-amber-300 shadow-sm transition">
+                    <i class="fa-solid fa-plus-circle mr-1.5"></i>Add One
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-1">
-        
-        <!-- Promo Announcement Banner -->
-        <div class="mb-6 bg-brand-yellow/20 border border-brand-yellow/60 rounded-2xl p-4 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-brand-yellow flex items-center justify-center text-black shrink-0 text-xl font-bold shadow-sm">
-                <i class="fa-solid fa-fire"></i>
-            </div>
-            <div class="flex-1">
-                <h3 class="font-bold text-sm sm:text-base text-black">Midnight Cravings or Summer Refreshment?</h3>
-                <p class="text-xs sm:text-sm text-gray-700">Try our freshly prepared Boba Teas, Crispy Burgers & Spicy Ramen!</p>
-            </div>
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <div id="noResults" class="hidden text-center py-16">
+            <i class="fa-solid fa-utensils text-4xl text-amber-400 mb-3"></i>
+            <h3 class="text-base font-bold text-gray-800">No items match your search</h3>
+            <p class="text-xs text-gray-500 mt-1">Try typing another food item or drink name.</p>
         </div>
 
-        <!-- MENU GRID CONTAINER -->
-        <div id="menuContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Dynamically populated by JS -->
-        </div>
+        <div id="menuContainer" class="space-y-10">
 
-        <!-- No Results State -->
-        <div id="noResults" class="hidden text-center py-12">
-            <i class="fa-solid fa-utensils text-4xl text-gray-300 mb-3"></i>
-            <h3 class="text-lg font-bold text-gray-700">No menu items found</h3>
-            <p class="text-xs text-gray-500">Try searching for something else or clear the search.</p>
-            <button onclick="resetSearch()" class="mt-4 px-4 py-2 bg-brand-yellow text-black text-xs font-bold rounded-full">
-                Show All Items
-            </button>
+            <!-- MAIN COURSE -->
+            <section id="sec-main" class="menu-sec">
+                <div class="flex items-center justify-between border-b-2 border-amber-400/80 pb-2 mb-4">
+                    <h2 class="text-xl font-extrabold text-black font-display tracking-wide uppercase flex items-center">
+                        <span class="w-3 h-6 bg-black rounded-sm mr-2.5"></span>Main Course
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="grid-main"></div>
+            </section>
+
+            <!-- DRINKS -->
+            <section id="sec-drinks" class="menu-sec">
+                <div class="flex items-center justify-between border-b-2 border-amber-400/80 pb-2 mb-4">
+                    <h2 class="text-xl font-extrabold text-black font-display tracking-wide uppercase flex items-center">
+                        <span class="w-3 h-6 bg-black rounded-sm mr-2.5"></span>Drinks (Iced)
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="grid-drinks"></div>
+            </section>
+
+            <!-- DESSERT -->
+            <section id="sec-dessert" class="menu-sec">
+                <div class="flex items-center justify-between border-b-2 border-amber-400/80 pb-2 mb-4">
+                    <h2 class="text-xl font-extrabold text-black font-display tracking-wide uppercase flex items-center">
+                        <span class="w-3 h-6 bg-black rounded-sm mr-2.5"></span>Dessert
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="grid-dessert"></div>
+            </section>
+
+            <!-- ADD ONE -->
+            <section id="sec-addons" class="menu-sec">
+                <div class="flex items-center justify-between border-b-2 border-amber-400/80 pb-2 mb-4">
+                    <h2 class="text-xl font-extrabold text-black font-display tracking-wide uppercase flex items-center">
+                        <span class="w-3 h-6 bg-black rounded-sm mr-2.5"></span>Add One
+                    </h2>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="grid-addons"></div>
+            </section>
+
         </div>
     </main>
 
-    <!-- ORDER SUMMARY FLOATING BAR (Appears when items are in cart) -->
-    <div id="cartBar" class="fixed bottom-4 left-4 right-4 max-w-xl mx-auto bg-black text-white p-3 sm:p-4 rounded-2xl shadow-2xl z-50 hidden flex items-center justify-between border border-brand-yellow/30">
-        <div class="flex items-center gap-3">
-            <div class="bg-brand-yellow text-black font-extrabold w-10 h-10 rounded-xl flex items-center justify-center text-sm shadow">
-                <span id="cartCount">0</span>
-            </div>
-            <div>
-                <p class="text-xs text-gray-400">Total Amount</p>
-                <p class="text-base font-bold text-brand-yellow" id="cartTotal">0 BDT</p>
-            </div>
-        </div>
-        <button onclick="openOrderModal()" class="bg-brand-yellow hover:bg-brand-darkYellow text-black px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition active:scale-95">
-            <i class="fa-brands fa-whatsapp text-lg"></i> Send Order
-        </button>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="bg-black text-white border-t border-white/10 mt-12 py-8 px-4 text-center">
-        <div class="max-w-4xl mx-auto space-y-4">
-            <div class="brush-font text-4xl text-brand-yellow font-bold">sipz</div>
-            <p class="text-xs text-gray-400 max-w-md mx-auto">
-                Dhaka 1216 • Delicious Fast Food, Refreshing Iced Beverages & Tasty Treats.
-            </p>
-            <div class="flex justify-center gap-4 text-brand-yellow text-lg">
-                <a href="tel:+8801700000000" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-black transition"><i class="fa-solid fa-phone"></i></a>
-                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-black transition"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-yellow hover:text-black transition"><i class="fa-brands fa-instagram"></i></a>
-            </div>
-            <p class="text-[10px] text-gray-500 pt-4">© 2026 Sipz | Dhaka. All rights reserved.</p>
-        </div>
+    <!-- Footer -->
+    <footer class="bg-black text-amber-300 py-6 px-4 text-center mt-12 border-t border-amber-500/30">
+        <p class="font-display font-bold tracking-widest text-lg">SIPZ | DHAKA</p>
+        <p class="text-xs text-amber-200/70 mt-1">Original Digital Menu Card &copy; SIPZ Dhaka</p>
     </footer>
 
-    <!-- ORDER MODAL -->
-    <div id="orderModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 text-black shadow-2xl relative animate-fade-in">
-            <button onclick="closeOrderModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-xl w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            
-            <h3 class="text-xl font-extrabold text-black mb-1">Your Order Summary</h3>
-            <p class="text-xs text-gray-500 mb-4">Confirm your selections to complete order via WhatsApp</p>
-
-            <div id="modalCartItems" class="max-h-48 overflow-y-auto space-y-2 border-t border-b border-gray-100 py-3 mb-4 pr-1">
-                <!-- Cart items dynamically placed here -->
-            </div>
-
-            <div class="flex justify-between items-center text-sm font-bold text-black mb-6">
-                <span>Grand Total:</span>
-                <span id="modalTotal" class="text-lg text-black bg-brand-yellow px-3 py-1 rounded-lg">0 BDT</span>
-            </div>
-
-            <div class="space-y-2">
-                <button onclick="sendWhatsAppOrder()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg transition">
-                    <i class="fa-brands fa-whatsapp text-xl"></i> Order via WhatsApp
-                </button>
-                <button onclick="closeOrderModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl text-xs transition">
-                    Continue Adding Items
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // MENU DATA DIRECTLY FROM YOUR SUBMITTED MENU IMAGES
-        const menuData = [
-            // MAIN COURSE
-            {
-                id: 'm1',
-                name: 'Chicken Club Sandwich',
-                category: 'main',
-                price: 260,
-                desc: 'Chicken, Cheese, Lettuce, Sauce with Fries',
-                image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80',
-                badge: 'Popular'
-            },
-            {
-                id: 'm2',
-                name: 'Chicken Cheese Burger',
-                category: 'main',
-                price: 265,
-                desc: 'Juicy Chicken patty, onion, cabbage, cheese',
-                image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'm3',
-                name: 'Crispy Chicken Burger',
-                category: 'main',
-                price: 235,
-                desc: 'Crispy Chicken, Sauce, lettuce',
-                image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=600&auto=format&fit=crop&q=80',
-                badge: 'Hot Seller'
-            },
-            {
-                id: 'm4',
-                name: 'Spicy Beef Ramen',
-                category: 'main',
-                price: 279,
-                desc: 'Ramen, Beef Bacon, Egg, Green Onions',
-                image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&auto=format&fit=crop&q=80',
-                badge: 'Chef Special'
-            },
-            {
-                id: 'm5',
-                name: 'Sweet & Spicy Wings',
-                category: 'main',
-                price: 220,
-                desc: 'Crispy fried wings tossed in rich sweet & spicy sauce',
-                image: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'm6',
-                name: 'Boneless Fried Chicken',
-                category: 'main',
-                price: 135,
-                desc: 'Tender boneless chicken strips fried to perfection',
-                image: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'm7',
-                name: 'Katsu Chicken Bowl',
-                category: 'main',
-                price: 239,
-                desc: 'Katsu Chicken, Egg With Rice',
-                image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'm8',
-                name: 'Crispy Chicken Wings',
-                category: 'main',
-                price: 199,
-                desc: 'Golden crispy chicken wings served hot',
-                image: 'https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'm9',
-                name: 'French Fries',
-                category: 'main',
-                price: 150,
-                desc: 'Classic salted crispy potato fries',
-                image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'm10',
-                name: 'Mexican Grilled Chicken Bowl',
-                category: 'main',
-                price: 289,
-                desc: 'Mexican Style Rice, Grilled Chicken, Sweetcorn, Mushroom, & Sour Cream',
-                image: 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'm11',
-                name: 'Cheesey Club Sandwich',
-                category: 'main',
-                price: 270,
-                desc: 'Midnight Special: Extra cheese toasted grilled sandwich',
-                image: 'https://images.unsplash.com/photo-1528736235302-52922df5c122?w=600&auto=format&fit=crop&q=80',
-                badge: 'Midnight Bite'
-            },
+        const menuData = {
+            main: [
+                { name: 'Chicken Club Sandwich', desc: 'Chicken, Cheese, Lettuce, Sauce with Fries', price: 260, img: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Chicken Cheese Burger', desc: 'Juicy Chicken patty, onion, cabbage, cheese', price: 265, img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Crispy Chicken Burger', desc: 'Crispy Chicken, Sauce, lettuce', price: 235, img: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Spicy Beef Ramen', desc: 'Ramen, Beef Becon, Egg, Green Onions', price: 279, img: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Sweet & Spicy Wings', desc: 'Crispy wings tossed in signature sweet spicy glaze', price: 220, img: 'https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Boneless Fried Chicken', desc: 'Golden fried tender boneless chicken', price: 135, img: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Katsu Chicken Bowl', desc: 'Katsu Chicken, Egg With Rice', price: 239, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Crispy Chicken Wings', desc: 'Classic crispy deep fried chicken wings', price: 199, img: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=500&q=80' },
+                { name: 'French Fries', desc: 'Crispy golden potato fries', price: 150, img: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Mexican Grilled Chicken Bowl', desc: 'Mexican Style Rice, Grilled Chicken, Sweetcorn, Mashroom, & Sour Cream', price: 289, img: 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=500&q=80' }
+            ],
+            drinks: [
+                { name: 'Taro Bubble Milk Tea', desc: 'Sweet taro milk tea with tapioca boba pearls', price: 239, img: 'https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Coconut Bubble Milk Tea', desc: 'Tropical iced coconut tea with chewy boba', price: 239, img: 'https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Mango Mojito Tea', desc: 'Refreshing mango tea with fresh mint & lime', price: 239, img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Passion Fruit Mojito Tea', desc: 'Zesty passion fruit tea infused with mint', price: 239, img: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Mint Lemonade', desc: 'Chilled iced fresh lemon & mint cooler', price: 149, img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Orange Squash', desc: 'Refreshing citrus orange mocktail', price: 159, img: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Cold Coffee With Choco Chips', desc: 'Rich cold coffee topped with choco chips', price: 149, img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Lemon Water', desc: 'Simple refreshing citrus lemon water', price: 80, img: 'https://images.unsplash.com/photo-1523677011781-c91d1bbe2f9e?auto=format&fit=crop&w=500&q=80' }
+            ],
+            dessert: [
+                { name: 'Chocolate Brownie', desc: 'Dense chocolate fudge baked brownie', price: 120, img: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Chocolate Cookies', desc: 'Crispy & chewy chocolate chip cookies', price: 50, img: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=500&q=80' },
+                { name: 'Chocho Fudge', desc: 'Rich velvety chocolate fudge dessert', price: 180, img: 'https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=500&q=80' }
+            ],
+            addons: [
+                { name: 'Extra Garlic Sauce', price: 25 },
+                { name: 'Extra Hot Sauce', price: 30 },
+                { name: 'Extra Boba', price: 30 },
+                { name: 'Extra Flavour', price: 40 },
+                { name: 'Extra mozzarella', price: 30 },
+                { name: 'Extra Egg', price: 20 },
+                { name: 'Extra Slice Cheese', price: 30 }
+            ]
+        };
 
-            // DRINKS (ICED)
-            {
-                id: 'd1',
-                name: 'Taro Bubble Milk Tea',
-                category: 'drinks',
-                price: 239,
-                desc: 'Smooth & creamy taro finish with tapioca boba pearls',
-                image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?w=600&auto=format&fit=crop&q=80',
-                badge: 'Bestseller'
-            },
-            {
-                id: 'd2',
-                name: 'Coconut Bubble Milk Tea',
-                category: 'drinks',
-                price: 239,
-                desc: 'Refreshing iced coconut milk tea with chewy pearls',
-                image: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'd3',
-                name: 'Mango Mojito Tea',
-                category: 'drinks',
-                price: 239,
-                desc: 'Summer Special fresh mango green tea with boba',
-                image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'd4',
-                name: 'Passion Fruit Mojito Tea',
-                category: 'drinks',
-                price: 239,
-                desc: 'Tropical passion fruit blend with mint & ice',
-                image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80',
-                badge: 'Summer Special'
-            },
-            {
-                id: 'd5',
-                name: 'Mint Lemonade',
-                category: 'drinks',
-                price: 149,
-                desc: 'Cooling lemon and fresh garden mint slush',
-                image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'd6',
-                name: 'Orange Squash',
-                category: 'drinks',
-                price: 159,
-                desc: 'Citrusy chilled iced orange drink',
-                image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'd7',
-                name: 'Cold Coffee With Choco Chips',
-                category: 'drinks',
-                price: 149,
-                desc: 'Rich blended cold coffee topped with chocolate chips',
-                image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'd8',
-                name: 'Lemon Water',
-                category: 'drinks',
-                price: 80,
-                desc: 'Light refreshing chilled lemon water',
-                image: 'https://images.unsplash.com/photo-1523371054106-bbf80586c38c?w=600&auto=format&fit=crop&q=80'
-            },
+        function makeItemCard(item) {
+            return `
+                <div class="item-card bg-white rounded-xl overflow-hidden border border-amber-200/80 shadow-sm flex flex-col justify-between hover:border-amber-400 transition" data-name="${item.name.toLowerCase()}" data-desc="${(item.desc || '').toLowerCase()}">
+                    <div class="flex p-3 space-x-3 items-center">
+                        <img src="${item.img}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg flex-shrink-0 bg-amber-100" onerror="this.src='https://placehold.co/200x200/fcd34d/000000?text=SIPZ';">
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-gray-900 text-sm leading-snug">${item.name}</h3>
+                            ${item.desc ? `<p class="text-[11px] text-gray-500 mt-1 leading-tight">${item.desc}</p>` : ''}
+                            <div class="mt-2 text-amber-700 font-extrabold text-sm">${item.price} <span class="text-[10px] font-bold">BDT</span></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
 
-            // DESSERT
-            {
-                id: 'des1',
-                name: 'Chocolate Brownie',
-                category: 'dessert',
-                price: 120,
-                desc: 'Rich fudgy chocolate brownie piece',
-                image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'des2',
-                name: 'Chocolate Cookies',
-                category: 'dessert',
-                price: 50,
-                desc: 'Freshly baked chocolate chunk cookie',
-                image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'des3',
-                name: 'Choco Fudge',
-                category: 'dessert',
-                price: 180,
-                desc: 'Decadent chocolate fudge dessert slice',
-                image: 'https://images.unsplash.com/photo-1579372786545-d24232daf58c?w=600&auto=format&fit=crop&q=80'
-            },
+        function makeAddonCard(addon) {
+            return `
+                <div class="item-card bg-white p-3 rounded-lg border border-amber-200 shadow-sm text-center flex flex-col justify-between" data-name="${addon.name.toLowerCase()}">
+                    <p class="font-bold text-xs text-gray-800">${addon.name}</p>
+                    <p class="text-xs font-black text-amber-700 mt-1">${addon.price} BDT</p>
+                </div>
+            `;
+        }
 
-            // ADD-ONS
-            {
-                id: 'a1',
-                name: 'Extra Garlic Sauce',
-                category: 'addons',
-                price: 25,
-                desc: 'Creamy house garlic dip',
-                image: 'https://images.unsplash.com/photo-1572449043416-55f4685c9bb7?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'a2',
-                name: 'Extra Hot Sauce',
-                category: 'addons',
-                price: 30,
-                desc: 'Spicy chili dip',
-                image: 'https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'a3',
-                name: 'Extra Boba',
-                category: 'addons',
-                price: 30,
-                desc: 'Chewy tapioca boba scoop',
-                image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'a4',
-                name: 'Extra Flavour',
-                category: 'addons',
-                price: 40,
-                desc: 'Custom syrup/flavor shot',
-                image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'a5',
-                name: 'Extra Mozzarella',
-                category: 'addons',
-                price: 30,
-                desc: 'Melted cheese topping',
-                image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'a6',
-                name: 'Extra Egg',
-                category: 'addons',
-                price: 20,
-                desc: 'Fried or boiled egg add-on',
-                image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop&q=80'
-            },
-            {
-                id: 'a7',
-                name: 'Extra Slice Cheese',
-                category: 'addons',
-                price: 30,
-                desc: 'Cheddar cheese slice',
-                image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=600&auto=format&fit=crop&q=80'
+        function render() {
+            document.getElementById('grid-main').innerHTML = menuData.main.map(makeItemCard).join('');
+            document.getElementById('grid-drinks').innerHTML = menuData.drinks.map(makeItemCard).join('');
+            document.getElementById('grid-dessert').innerHTML = menuData.dessert.map(makeItemCard).join('');
+            document.getElementById('grid-addons').innerHTML = menuData.addons.map(makeAddonCard).join('');
+        }
+
+        function filterCategory(cat) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-black', 'text-amber-300');
+                btn.classList.add('bg-white', 'text-gray-800');
+            });
+            const activeBtn = document.getElementById(`tab-${cat}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('bg-white', 'text-gray-800');
+                activeBtn.classList.add('bg-black', 'text-amber-300');
             }
-        ];
 
-        // State Variables
-        let currentCategory = 'all';
-        let searchQuery = '';
-        let cart = {}; // { itemId: quantity }
+            const secs = {
+                'main': document.getElementById('sec-main'),
+                'drinks': document.getElementById('sec-drinks'),
+                'dessert': document.getElementById('sec-dessert'),
+                'addons': document.getElementById('sec-addons')
+            };
 
-        // Render Initial Items
-        window.addEventListener('DOMContentLoaded', () => {
-            renderMenu();
+            if(cat === 'all') {
+                Object.values(secs).forEach(s => s.classList.remove('hidden'));
+            } else {
+                Object.keys(secs).forEach(k => {
+                    if(k === cat) secs[k].classList.remove('hidden');
+                    else secs[k].classList.add('hidden');
+                });
+            }
+            filterSearch();
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearSearch');
+        const noRes = document.getElementById('noResults');
+
+        function filterSearch() {
+            const q = searchInput.value.trim().toLowerCase();
+            let count = 0;
+            if(q) clearBtn.classList.remove('hidden');
+            else clearBtn.classList.add('hidden');
+
+            document.querySelectorAll('.item-card').forEach(card => {
+                const name = card.getAttribute('data-name') || '';
+                const desc = card.getAttribute('data-desc') || '';
+                const sec = card.closest('.menu-sec');
+
+                if(!sec.classList.contains('hidden') && (name.includes(q) || desc.includes(q))) {
+                    card.classList.remove('hidden');
+                    count++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            if(count === 0) noRes.classList.remove('hidden');
+            else noRes.classList.add('hidden');
+        }
+
+        searchInput.addEventListener('input', filterSearch);
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            filterSearch();
         });
 
-        // Render Menu Items
-        function renderMenu() {
-            const container = document.getElementById('menuContainer');
-            const noResults = document.getElementById('noResults');
-            container.innerHTML = '';
-
-            const filtered = menuData.filter(item => {
-                const matchesCat = currentCategory === 'all' || item.category === currentCategory;
-                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                      item.desc.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesCat && matchesSearch;
-            });
-
-            if (filtered.length === 0) {
-                noResults.classList.remove('hidden');
-                return;
-            } else {
-                noResults.classList.add('hidden');
-            }
-
-            filtered.forEach(item => {
-                const qty = cart[item.id] || 0;
-                const card = document.createElement('div');
-                card.className = "bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group";
-
-                card.innerHTML = `
-                    <div>
-                        <!-- Image Container -->
-                        <div class="relative h-44 w-full overflow-hidden bg-gray-100">
-                            <img 
-                                src="${item.image}" 
-                                alt="${item.name}" 
-                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                                loading="lazy"
-                                onerror="this.src='https://placehold.co/600x400/FFC801/000000?text=${encodeURIComponent(item.name)}'"
-                            />
-                            ${item.badge ? `<span class="absolute top-3 left-3 bg-brand-yellow text-black text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full shadow-sm">${item.badge}</span>` : ''}
-                            <div class="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md text-brand-yellow font-extrabold text-xs px-3 py-1 rounded-full">
-                                ${item.price} BDT
-                            </div>
-                        </div>
-
-                        <!-- Info -->
-                        <div class="p-4">
-                            <h4 class="font-bold text-base text-black group-hover:text-amber-600 transition">${item.name}</h4>
-                            <p class="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">${item.desc}</p>
-                        </div>
-                    </div>
-
-                    <!-- Action Button / Quantity Controls -->
-                    <div class="p-4 pt-0">
-                        ${qty === 0 ? `
-                            <button 
-                                onclick="updateCart('${item.id}', 1)"
-                                class="w-full bg-black hover:bg-brand-yellow hover:text-black text-white font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-2 transition active:scale-95 shadow-sm">
-                                <i class="fa-solid fa-plus text-xs"></i> Add To Order
-                            </button>
-                        ` : `
-                            <div class="flex items-center justify-between bg-brand-yellow/20 border border-brand-yellow/60 p-1 rounded-xl">
-                                <button onclick="updateCart('${item.id}', -1)" class="w-8 h-8 rounded-lg bg-white text-black font-bold flex items-center justify-center hover:bg-black hover:text-white transition">
-                                    <i class="fa-solid fa-minus text-xs"></i>
-                                </button>
-                                <span class="font-extrabold text-sm text-black px-2">${qty}</span>
-                                <button onclick="updateCart('${item.id}', 1)" class="w-8 h-8 rounded-lg bg-black text-brand-yellow font-bold flex items-center justify-center hover:bg-brand-yellow hover:text-black transition">
-                                    <i class="fa-solid fa-plus text-xs"></i>
-                                </button>
-                            </div>
-                        `}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Category Filter
-        function setCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                if (btn.dataset.cat === cat) {
-                    btn.className = "cat-btn active px-4 py-2 rounded-full bg-black text-brand-yellow shrink-0 transition shadow-sm font-bold";
-                } else {
-                    btn.className = "cat-btn px-4 py-2 rounded-full bg-white text-black hover:bg-black/10 shrink-0 transition";
-                }
-            });
-            renderMenu();
-        }
-
-        // Search Input Filter
-        function filterItems() {
-            const input = document.getElementById('searchInput');
-            searchQuery = input.value;
-            const clearBtn = document.getElementById('clearSearch');
-            
-            if (searchQuery.length > 0) {
-                clearBtn.classList.remove('hidden');
-            } else {
-                clearBtn.classList.add('hidden');
-            }
-            renderMenu();
-        }
-
-        function resetSearch() {
-            const input = document.getElementById('searchInput');
-            input.value = '';
-            searchQuery = '';
-            document.getElementById('clearSearch').classList.add('hidden');
-            renderMenu();
-        }
-
-        // Cart Logic
-        function updateCart(itemId, change) {
-            const currentQty = cart[itemId] || 0;
-            const newQty = currentQty + change;
-
-            if (newQty <= 0) {
-                delete cart[itemId];
-            } else {
-                cart[itemId] = newQty;
-            }
-
-            renderMenu();
-            updateCartBar();
-        }
-
-        function updateCartBar() {
-            const cartBar = document.getElementById('cartBar');
-            const cartCount = document.getElementById('cartCount');
-            const cartTotal = document.getElementById('cartTotal');
-
-            let totalItems = 0;
-            let totalPrice = 0;
-
-            Object.keys(cart).forEach(id => {
-                const item = menuData.find(m => m.id === id);
-                if (item) {
-                    totalItems += cart[id];
-                    totalPrice += item.price * cart[id];
-                }
-            });
-
-            if (totalItems > 0) {
-                cartCount.innerText = totalItems;
-                cartTotal.innerText = `${totalPrice} BDT`;
-                cartBar.classList.remove('hidden');
-            } else {
-                cartBar.classList.add('hidden');
-            }
-        }
-
-        // Order Modal Handlers
-        function openOrderModal() {
-            const modal = document.getElementById('orderModal');
-            const container = document.getElementById('modalCartItems');
-            const modalTotal = document.getElementById('modalTotal');
-            container.innerHTML = '';
-
-            let grandTotal = 0;
-
-            Object.keys(cart).forEach(id => {
-                const item = menuData.find(m => m.id === id);
-                if (item) {
-                    const itemTotal = item.price * cart[id];
-                    grandTotal += itemTotal;
-
-                    const row = document.createElement('div');
-                    row.className = "flex justify-between items-center text-xs py-1.5 border-b border-gray-50";
-                    row.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold bg-black text-brand-yellow px-2 py-0.5 rounded">${cart[id]}x</span>
-                            <span class="font-semibold text-gray-800">${item.name}</span>
-                        </div>
-                        <span class="font-bold text-black">${itemTotal} BDT</span>
-                    `;
-                    container.appendChild(row);
-                }
-            });
-
-            modalTotal.innerText = `${grandTotal} BDT`;
-            modal.classList.remove('hidden');
-        }
-
-        function closeOrderModal() {
-            document.getElementById('orderModal').classList.add('hidden');
-        }
-
-        // Send Order to WhatsApp
-        function sendWhatsAppOrder() {
-            let message = "*New Order - Sipz | Dhaka*\n\n";
-            let total = 0;
-
-            Object.keys(cart).forEach(id => {
-                const item = menuData.find(m => m.id === id);
-                if (item) {
-                    const subtotal = item.price * cart[id];
-                    total += subtotal;
-                    message += `• ${item.name} x${cart[id]} = ${subtotal} BDT\n`;
-                }
-            });
-
-            message += `\n*Total Amount: ${total} BDT*`;
-            message += `\nLocation: Dhaka 1216`;
-
-            // WhatsApp link encoding
-            const whatsappNumber = "8801700000000"; // Replace with actual Sipz phone number
-            const encodedText = encodeURIComponent(message);
-            window.open(`https://wa.me/${whatsappNumber}?text=${encodedText}`, '_blank');
-        }
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        window.onload = render;
     </script>
 </body>
 </html>
