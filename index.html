@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn" class="h-full">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,13 +48,9 @@
         .brush-font {
             font-family: 'Caveat', cursive;
         }
-
-        .hero-shadow {
-            box-shadow: 0 10px 30px -5px rgba(255, 200, 1, 0.4);
-        }
     </style>
 </head>
-<body class="bg-brand-bg text-brand-black min-h-full font-sans antialiased selection:bg-brand-yellow selection:text-black flex flex-col justify-between">
+<body class="bg-brand-bg text-brand-black min-h-screen font-sans antialiased selection:bg-brand-yellow selection:text-black flex flex-col justify-between">
 
     <!-- HEADER / BRANDING BANNER -->
     <header class="bg-brand-yellow relative z-40 shadow-md transition-all">
@@ -214,7 +210,6 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // MENU DATA DIRECTLY FROM YOUR SUBMITTED MENU IMAGES
         const menuData = [
             // MAIN COURSE
             {
@@ -308,7 +303,7 @@
                 category: 'drinks',
                 price: 239,
                 desc: 'Smooth & creamy taro finish with tapioca boba pearls',
-                image: 'imagestaroboba.jpeg,
+                image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?w=600&auto=format&fit=crop&q=80',
                 badge: 'Bestseller'
             },
             {
@@ -454,17 +449,14 @@
             }
         ];
 
-        // State Variables
         let currentCategory = 'all';
         let searchQuery = '';
-        let cart = {}; // { itemId: quantity }
+        let cart = {};
 
-        // Render Initial Items
         window.addEventListener('DOMContentLoaded', () => {
             renderMenu();
         });
 
-        // Render Menu Items
         function renderMenu() {
             const container = document.getElementById('menuContainer');
             const noResults = document.getElementById('noResults');
@@ -491,7 +483,6 @@
 
                 card.innerHTML = `
                     <div>
-                        <!-- Image Container -->
                         <div class="relative h-44 w-full overflow-hidden bg-gray-100">
                             <img 
                                 src="${item.image}" 
@@ -506,14 +497,12 @@
                             </div>
                         </div>
 
-                        <!-- Info -->
                         <div class="p-4">
                             <h4 class="font-bold text-base text-black group-hover:text-amber-600 transition">${item.name}</h4>
                             <p class="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">${item.desc}</p>
                         </div>
                     </div>
 
-                    <!-- Action Button / Quantity Controls -->
                     <div class="p-4 pt-0">
                         ${qty === 0 ? `
                             <button 
@@ -538,7 +527,6 @@
             });
         }
 
-        // Category Filter
         function setCategory(cat) {
             currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => {
@@ -551,7 +539,6 @@
             renderMenu();
         }
 
-        // Search Input Filter
         function filterItems() {
             const input = document.getElementById('searchInput');
             searchQuery = input.value;
@@ -573,7 +560,6 @@
             renderMenu();
         }
 
-        // Cart Logic
         function updateCart(itemId, change) {
             const currentQty = cart[itemId] || 0;
             const newQty = currentQty + change;
@@ -613,7 +599,6 @@
             }
         }
 
-        // Order Modal Handlers
         function openOrderModal() {
             const modal = document.getElementById('orderModal');
             const container = document.getElementById('modalCartItems');
@@ -649,7 +634,6 @@
             document.getElementById('orderModal').classList.add('hidden');
         }
 
-        // Send Order to WhatsApp
         function sendWhatsAppOrder() {
             let message = "*New Order - Sipz | Dhaka*\n\n";
             let total = 0;
@@ -666,8 +650,7 @@
             message += `\n*Total Amount: ${total} BDT*`;
             message += `\nLocation: Dhaka 1216`;
 
-            // WhatsApp link encoding
-            const whatsappNumber = "8801616621200"; // Replace with actual Sipz phone number
+            const whatsappNumber = "8801616621200";
             const encodedText = encodeURIComponent(message);
             window.open(`https://wa.me/${whatsappNumber}?text=${encodedText}`, '_blank');
         }
