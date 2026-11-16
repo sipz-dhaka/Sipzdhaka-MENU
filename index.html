@@ -252,6 +252,24 @@ input,textarea,select{font-size:16px}
 /* keep every menu picture the same size, whatever the photo's own shape */
 .card .pic{overflow:hidden}
 .card .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* ---- offers slider ---- */
+.ofr{margin:20px 0 4px}
+.ofr h2{font-size:20px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ofr h2 i{color:#e5533d}
+.ofr-box{position:relative}
+.ofr-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:2px 2px 6px}
+.ofr-track::-webkit-scrollbar{display:none}
+.ofr-slide{flex:none;scroll-snap-align:start;padding:0;border-radius:18px;overflow:hidden;background:#141414;box-shadow:0 6px 18px -8px rgba(0,0,0,.45);position:relative;max-width:88vw}
+.ofr-slide img{display:block;height:min(400px,60vh);width:auto;max-width:100%;object-fit:cover}
+.ofr-slide .cta{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--y);color:var(--ink);font-weight:800;font-size:14px;padding:11px 14px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.ofr-slide:active{transform:scale(.99)}
+.ofr-dots{display:flex;justify-content:center;gap:7px;margin-top:8px}
+.ofr-dots button{width:8px;height:8px;border-radius:99px;background:rgba(20,20,20,.22);transition:width .25s,background .25s;padding:0}
+.ofr-dots button.on{width:22px;background:var(--ink)}
+.ofr-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:var(--y);color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.35);display:none;place-items:center;z-index:2}
+.ofr-nav.l{left:-10px}.ofr-nav.r{right:-10px}
+@media(hover:hover) and (min-width:768px){.ofr-nav.show{display:grid}}
 </style>
 </head>
 <body>
@@ -277,6 +295,7 @@ input,textarea,select{font-size:16px}
 </div>
 
 <main class="wrap">
+  <section class="ofr" id="ofr" hidden aria-label="Special offers"></section>
   <div class="promo"><i class="fa-solid fa-fire"></i><div><b>Midnight cravings or summer refreshment?</b><span>Try our fresh boba teas, crispy burgers and spicy ramen.</span></div></div>
   <div id="menu"></div>
 </main>
@@ -347,6 +366,24 @@ input,textarea,select{font-size:16px}
 <script>
 const Y='#FFCC01',WA='8801616621200';
 const CATS={main:['Main Course','fa-burger'],drinks:['Drinks (Iced)','fa-glass-water'],dessert:['Dessert','fa-cookie-bite'],addons:['Add-Ons','fa-circle-plus']};
+
+/* =====================================================================
+   OFFER BANNERS (the slider at the top of the menu)
+   - To ADD an offer: copy one line, paste it, change the values.
+   - To REMOVE an offer: delete its line (or put // in front of it).
+   - To CHANGE the order: move the lines up or down.
+   Fields:
+     img   : banner picture file name (upload it next to index.html)
+     title : offer name (used in the WhatsApp message)
+     item  : OPTIONAL. A menu item id (e.g. 'm3'). Clicking opens that item.
+             If you leave it out, clicking opens WhatsApp to claim the offer.
+     until : OPTIONAL. Last day, 'YYYY-MM-DD'. After that day the banner hides by itself.
+   ===================================================================== */
+const OFFERS=[
+ {img:'burgofr.jpeg', title:'Burger Buy 1 Get 1 Free'},
+ {img:'sswofr.jpeg',  title:'Sweet & Spicy Wings - Buy 3 Get 1 Free'}
+];
+const OFFER_SLIDE_SECONDS=4;   // seconds before the slider moves to the next banner (0 = no auto slide)
 const U=id=>`https://images.unsplash.com/photo-${id}?w=600&auto=format&fit=crop&q=80`;
 const M=[
 {id:'m1',c:'main',n:'Chicken Club Sandwich',p:260,d:'Chicken, Cheese, Lettuce, Sauce with Fries',i:'ccs.jpeg',b:'Popular'},
@@ -758,7 +795,49 @@ document.addEventListener('click',e=>{
   const done=()=>{c.textContent='Copied';setTimeout(()=>{c.textContent='Copy'},1500)};
   try{navigator.clipboard.writeText(ord.no).then(done,done)}catch(_){done()}
 });
-loadState();renderTabs();renderMenu();paintCart();paintStatus();setInterval(paintStatus,60000);
+
+/* ---- offers slider ---- */
+const offerLive=()=>OFFERS.filter(o=>!o.until||new Date()<=new Date(o.until+'T23:59:59+06:00'));
+function renderOffers(){
+  const box=$('ofr'),list=offerLive();
+  if(!list.length){box.hidden=true;box.innerHTML='';return}
+  box.hidden=false;
+  box.innerHTML=`<h2><i class="fa-solid fa-fire"></i>Special Offers</h2><div class="ofr-box"><button class="ofr-nav l" id="ofL" aria-label="Previous offer"><i class="fa-solid fa-chevron-left"></i></button><div class="ofr-track" id="ofT">${list.map((o,k)=>`<button class="ofr-slide" data-of="${k}" aria-label="${esc(o.title)}"><img src="${esc(o.img)}" alt="${esc(o.title)}" data-n="${esc(o.title)}" ${k?'loading="lazy"':''}><span class="cta"><i class="fa-solid fa-hand-pointer"></i>Tap to get this offer</span></button>`).join('')}</div><button class="ofr-nav r" id="ofR" aria-label="Next offer"><i class="fa-solid fa-chevron-right"></i></button></div><div class="ofr-dots" id="ofD"></div>`;
+  const tr=$('ofT'),dots=$('ofD'),sl=[...tr.children];
+  dots.innerHTML=sl.map((_,k)=>`<button data-od="${k}" aria-label="Offer ${k+1}"></button>`).join('');
+  const cur=()=>{let b=0,bd=1e9;sl.forEach((e,k)=>{const d=Math.abs(e.offsetLeft-tr.offsetLeft-tr.scrollLeft);if(d<bd){bd=d;b=k}});return b};
+  const go=k=>tr.scrollTo({left:sl[k].offsetLeft-tr.offsetLeft,behavior:'smooth'});
+  const canScroll=()=>tr.scrollWidth>tr.clientWidth+4;
+  const paint=()=>{
+    const c=cur(),sc=canScroll();
+    [...dots.children].forEach((d,k)=>d.classList.toggle('on',k===c));
+    dots.style.display=sc?'flex':'none';
+    $('ofL').classList.toggle('show',sc&&tr.scrollLeft>4);
+    $('ofR').classList.toggle('show',sc&&tr.scrollLeft<tr.scrollWidth-tr.clientWidth-4);
+  };
+  tr.addEventListener('scroll',()=>requestAnimationFrame(paint),{passive:true});
+  addEventListener('resize',paint);
+  dots.onclick=e=>{const b=e.target.closest('[data-od]');if(b)go(+b.dataset.od)};
+  $('ofL').onclick=()=>go(Math.max(0,cur()-1));
+  $('ofR').onclick=()=>go(Math.min(sl.length-1,cur()+1));
+  /* auto slide: pauses while the person touches / hovers */
+  let timer=null,hold=false;
+  const next=()=>{if(hold||!canScroll()||document.hidden)return;const atEnd=tr.scrollLeft>=tr.scrollWidth-tr.clientWidth-4;go(atEnd?0:Math.min(sl.length-1,cur()+1))};
+  const start=()=>{clearInterval(timer);if(OFFER_SLIDE_SECONDS>0)timer=setInterval(next,OFFER_SLIDE_SECONDS*1000)};
+  const pause=()=>{hold=true},resume=()=>{hold=false;start()};
+  ['pointerdown','touchstart','mouseenter','focusin'].forEach(ev=>box.addEventListener(ev,pause,{passive:true}));
+  ['pointerup','touchend','touchcancel','mouseleave','focusout'].forEach(ev=>box.addEventListener(ev,resume,{passive:true}));
+  start();paint();
+  setTimeout(paint,400);
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-of]');if(!b)return;
+  const o=offerLive()[+b.dataset.of];if(!o)return;
+  if(o.item&&M.find(m=>m.id===o.item)){openProduct(o.item);return}
+  const msg='Hi Sipz! I want to claim this offer:\n*'+o.title+'*';
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,'_blank');
+});
+loadState();renderTabs();renderMenu();renderOffers();paintCart();paintStatus();setInterval(paintStatus,60000);
 </script>
 </body>
 </html>
